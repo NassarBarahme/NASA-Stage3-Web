@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Weather Wisdom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #0B3D91 100%);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #fff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-cyan: #00D9FF;
+            --accent-green: #4ECDC4;
+            --accent-orange: #FF6B35;
+            --accent-purple: #9D4EDD;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 25s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 17, 40, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            padding: 100px 5% 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .hero-section h1 {
+            font-size: 56px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: gradientShift 5s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 40px;
+            color: var(--accent-cyan);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 217, 255, 0.5);
+            box-shadow: 0 25px 70px rgba(0, 217, 255, 0.2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-green);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-item h3 {
+            font-size: 22px;
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .method-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .method-card.realtime::before {
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+        }
+
+        .method-card.statistical::before {
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+        }
+
+        .method-card.climate::before {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-orange));
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .badge-realtime {
+            background: rgba(78, 205, 196, 0.2);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .badge-statistical {
+            background: rgba(0, 217, 255, 0.2);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .badge-climate {
+            background: rgba(157, 78, 221, 0.2);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+        }
+
+        .method-card h3 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .method-card .duration {
+            font-size: 18px;
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+        }
+
+        .method-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .method-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .method-card li {
+            padding: 10px 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .method-card li:last-child {
+            border-bottom: none;
+        }
+
+        .method-card li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+        }
+
+        .team-member-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .team-member h3 {
+            font-size: 20px;
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+        }
+
+        .team-member .role {
+            color: var(--accent-green);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .team-member .id {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .data-sources {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .source-badge {
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .source-badge:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
+        }
+
+        footer {
+            padding: 50px 5%;
+            text-align: center;
+            background: rgba(10, 17, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-section h4 {
+            color: var(--accent-green);
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 36px;
+            }
+            .section-title {
+                font-size: 30px;
+            }
+            .features-grid,
+            .methodology-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <nav>
+        <div class="logo">⚡ Weather Wisdom</div>
+        <div class="nav-links">
+            <a href="Landing Page.html">Home</a>
+            <a href="DASH.html">Dashboard</a>
+            <a href="About.html">About</a>
+            <a href="Documentation Page.html">Documentation</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1>About Weather Wisdom</h1>
+            <p>
+                A hybrid weather forecasting system combining real-time predictions, 
+                statistical analysis, and climate patterns to deliver personalized 
+                weather intelligence for NASA Space Apps Challenge 2025.
+            </p>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">Project Overview</h2>
+            <div class="glass-card">
+                <p style="font-size: 18px; line-height: 1.8; color: var(--text-secondary);">
+                    Weather Wisdom is an advanced weather forecasting platform that addresses the challenge 
+                    "Will It Rain On My Parade?" by providing personalized weather predictions across three 
+                    time horizons. Our hybrid approach combines real-time meteorological data, historical 
+                    statistical analysis, and climate patterns to offer users comprehensive weather intelligence 
+                    for planning outdoor activities, travel, and events.
+                </p>
+                <br>
+                <p style="font-size: 18px; line-height: 1.8; color: var(--text-secondary);">
+                    Unlike traditional weather services that provide generic forecasts, Weather Wisdom allows 
+                    users to define their own comfort thresholds and query specific conditions like "very hot," 
+                    "very wet," or "uncomfortable" days. This personalized approach empowers users to make 
+                    informed decisions based on their individual preferences and needs.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Hybrid Forecasting System</h2>
+            <div class="methodology-grid">
+                <div class="method-card realtime">
+                    <span class="method-badge badge-realtime">Real-Time</span>
+                    <h3>Short-Term Forecast</h3>
+                    <div class="duration">7-Day Predictions</div>
+                    <p>
+                        Utilizes OpenWeatherMap API for actual meteorological predictions. 
+                        Provides hour-by-hour and daily forecasts with high accuracy.
+                    </p>
+                    <ul>
+                        <li>Professional weather models</li>
+                        <li>Real-time atmospheric data</li>
+                        <li>Hourly updates</li>
+                        <li>95%+ accuracy</li>
+                    </ul>
+                </div>
+
+                <div class="method-card statistical">
+                    <span class="method-badge badge-statistical">Statistical</span>
+                    <h3>Medium-Term Outlook</h3>
+                    <div class="duration">30-Day Analysis</div>
+                    <p>
+                        Analyzes historical NASA POWER data from the same period in previous years. 
+                        Calculates probability distributions for weather conditions.
+                    </p>
+                    <ul>
+                        <li>30+ years historical data</li>
+                        <li>Statistical modeling</li>
+                        <li>Probability-based predictions</li>
+                        <li>85% confidence intervals</li>
+                    </ul>
+                </div>
+
+                <div class="method-card climate">
+                    <span class="method-badge badge-climate">Climate</span>
+                    <h3>Long-Term Forecast</h3>
+                    <div class="duration">Seasonal Outlook</div>
+                    <p>
+                        Uses climate patterns and long-term averages to provide seasonal expectations. 
+                        Useful for planning 3-12 months ahead.
+                    </p>
+                    <ul>
+                        <li>30-year climate normals</li>
+                        <li>Seasonal trends</li>
+                        <li>General expectations</li>
+                        <li>Long-term planning</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Custom Thresholds</h3>
+                    <p>Define your personal comfort levels for temperature, wind, precipitation, and humidity.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🌡️</div>
+                    <h3>Comfort Index</h3>
+                    <p>ML-powered algorithm calculating comfort scores based on temperature, humidity, and wind.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Condition Queries</h3>
+                    <p>Search for specific weather conditions: hot, cold, windy, wet, or uncomfortable days.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h3>Visual Analytics</h3>
+                    <p>Interactive charts and graphs showing temperature trends, precipitation patterns, and more.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Coverage</h3>
+                    <p>Access weather data for any location worldwide using NASA's comprehensive datasets.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📅</div>
+                    <h3>Multi-Horizon</h3>
+                    <p>Three forecasting methods covering 7 days to 12 months for complete planning flexibility.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Data Sources</h2>
+            <div class="glass-card">
+                <p style="font-size: 18px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 30px; text-align: center;">
+                    Our system integrates data from multiple authoritative sources to ensure accuracy and reliability
+                </p>
+                <div class="data-sources">
+                    <div class="source-badge">
+                        🛰️ NASA POWER API<br>
+                        <small style="color: var(--text-secondary);">Historical & Climate Data</small>
+                    </div>
+                    <div class="source-badge">
+                        🌤️ OpenWeatherMap<br>
+                        <small style="color: var(--text-secondary);">Real-Time Forecasts</small>
+                    </div>
+                    <div class="source-badge">
+                        🗺️ Leaflet Maps<br>
+                        <small style="color: var(--text-secondary);">Interactive Location Selection</small>
+                    </div>
+                    <div class="source-badge">
+                        📈 Chart.js<br>
+                        <small style="color: var(--text-secondary);">Data Visualization</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">TopTeam</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-member-icon">👨‍💻</div>
+                    <h3>Nassar Barahmeh</h3>
+                    <div class="role">Team Leader</div>
+                    <div class="id">ID: 12218619 | CE</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-member-icon">👨‍💻</div>
+                    <h3>Ibrahim Mashaqi</h3>
+                    <div class="role">Technical Lead</div>
+                    <div class="id">ID: 12218206 | CE</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-member-icon">👨‍💻</div>
+                    <h3>Waseem Salahat</h3>
+                    <div class="role">Developer</div>
+                    <div class="id">ID: 12218556 | CAP</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-member-icon">👨‍💻</div>
+                    <h3>Majeed Suradi</h3>
+                    <div class="role">Developer</div>
+                    <div class="id">ID: 12217156 | CE</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-member-icon">👩‍💻</div>
+                    <h3>Nour Ghazali</h3>
+                    <div class="role">Developer</div>
+                    <div class="id">ID: 12441461 | CE</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-member-icon">👩‍💻</div>
+                    <h3>Leen Daraghmeh</h3>
+                    <div class="role">Developer</div>
+                    <div class="id">ID: 12427773 | CE</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Impact & Applications</h2>
+            <div class="glass-card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                    <div>
+                        <h3 style="color: var(--accent-green); margin-bottom: 15px;">Personal Planning</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.7;">
+                            Plan outdoor activities, events, and travel with confidence using personalized weather insights.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--accent-cyan); margin-bottom: 15px;">Agriculture</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.7;">
+                            Farmers can plan planting, harvesting, and irrigation based on statistical weather patterns.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--accent-orange); margin-bottom: 15px;">Risk Reduction</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.7;">
+                            Early warnings for extreme conditions help minimize weather-related risks and losses.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Weather Wisdom</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        NASA-powered weather intelligence for better outdoor planning
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <div class="footer-links">
+                        <a href="Landing Page.html">Home</a>
+                        <a href="DASH.html">Dashboard</a>
+                        <a href="About.html">About</a>
+                        <a href="Documentation Page.html">Documentation</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <div class="footer-links">
+                        <a href="https://power.larc.nasa.gov" target="_blank">NASA POWER API</a>
+                        <a href="https://www.spaceappschallenge.org" target="_blank">Space Apps Challenge</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    NASA Space Apps Challenge 2025 | Built with passion for better weather planning
+                </p>
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 10px;">
+                    Powered by NASA Earth Observation Data
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 3 + 1 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 15 + 20) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

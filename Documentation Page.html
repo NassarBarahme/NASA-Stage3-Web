@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Weather Wisdom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #141b3d;
+            --bg-card: #1a2347;
+            --text-primary: #ffffff;
+            --text-secondary: #a8b2d1;
+            --accent-cyan: #00d9ff;
+            --accent-purple: #9d4edd;
+            --accent-green: #4ecdc4;
+            --accent-orange: #ff6b35;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(26, 35, 71, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(0, 217, 255, 0.1));
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .doc-nav {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .doc-nav h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .doc-nav ul {
+            list-style: none;
+        }
+
+        .doc-nav ul li {
+            margin: 0.5rem 0;
+        }
+
+        .doc-nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .doc-nav ul li a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .doc-content {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 15px;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 120px;
+        }
+
+        .section h2 {
+            color: var(--accent-cyan);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .section h3 {
+            color: var(--accent-purple);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section h4 {
+            color: var(--accent-green);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-green);
+        }
+
+        .info-box {
+            background: rgba(0, 217, 255, 0.1);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 4px solid var(--accent-orange);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(0, 217, 255, 0.1));
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--accent-purple);
+        }
+
+        .feature-card h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .formula {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--accent-green);
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-green);
+            margin: 1rem 0;
+        }
+
+        ul, ol {
+            color: var(--text-secondary);
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        ul li, ol li {
+            margin: 0.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        table th {
+            background: var(--bg-primary);
+            color: var(--accent-cyan);
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--accent-cyan);
+        }
+
+        table td {
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .doc-nav {
+                position: static;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Weather Wisdom</div>
+            <ul class="nav-links">
+                <li><a href="Landing Page.html">Home</a></li>
+                <li><a href="DASH.html">Dashboard</a></li>
+                <li><a href="About.html">About</a></li>
+                <li><a href="Documentation Page.html">Documentation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Technical Documentation</h1>
+            <p>Complete guide to Weather Wisdom's architecture, algorithms, and implementation</p>
+        </div>
+
+        <div class="content-wrapper">
+            <aside class="doc-nav">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#overview">System Overview</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#forecasting">Hybrid Forecasting</a></li>
+                    <li><a href="#comfort">Comfort Index</a></li>
+                    <li><a href="#api">API Integration</a></li>
+                    <li><a href="#thresholds">Custom Thresholds</a></li>
+                    <li><a href="#usage">User Guide</a></li>
+                    <li><a href="#technical">Technical Details</a></li>
+                </ul>
+            </aside>
+
+            <main class="doc-content">
+                <section id="overview" class="section">
+                    <h2>System Overview</h2>
+                    <p>
+                        Weather Wisdom is an intelligent weather analysis platform that combines historical data analysis 
+                        with multi-timeframe forecasting capabilities. The system provides personalized weather insights 
+                        through a unique hybrid forecasting approach.
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>Hybrid Forecasting</h4>
+                            <p>Three distinct forecasting methods for different timeframes (7 days, 30 days, seasonal)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Comfort Index</h4>
+                            <p>Proprietary algorithm combining temperature, humidity, and wind speed</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Custom Thresholds</h4>
+                            <p>User-defined weather condition preferences for personalized analysis</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Multi-Source Data</h4>
+                            <p>Integration with NASA POWER and OpenWeatherMap APIs</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Project Status:</strong> Phase 1 (Historical Analysis & Hybrid Forecasting) is fully implemented. 
+                        Phase 2 will introduce machine learning models for enhanced predictive capabilities.
+                    </div>
+                </section>
+
+                <section id="architecture" class="section">
+                    <h2>System Architecture</h2>
+                    
+                    <h3>Technology Stack</h3>
+                    <ul>
+                        <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+)</li>
+                        <li><strong>Mapping:</strong> Leaflet.js with OpenStreetMap tiles</li>
+                        <li><strong>Visualization:</strong> Chart.js for data visualization</li>
+                        <li><strong>APIs:</strong> NASA POWER API, OpenWeatherMap API</li>
+                    </ul>
+
+                    <h3>Data Flow Architecture</h3>
+                    <div class="code-block">
+User Input (Location + Date Range)
+    ↓
+Data Fetching Layer
+    ├─→ NASA POWER API (Historical Data)
+    └─→ OpenWeatherMap API (Real-time Forecast)
+    ↓
+Processing Layer
+    ├─→ Comfort Index Calculator
+    ├─→ Statistical Analyzer
+    └─→ Condition Detector
+    ↓
+Presentation Layer
+    ├─→ Interactive Charts
+    ├─→ Statistics Dashboard
+    └─→ Forecast Cards
+                    </div>
+
+                    <h3>Component Architecture</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Responsibility</th>
+                                <th>Technologies</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Map Interface</td>
+                                <td>Location selection and visualization</td>
+                                <td>Leaflet.js, OSM</td>
+                            </tr>
+                            <tr>
+                                <td>Data Fetcher</td>
+                                <td>API calls and data retrieval</td>
+                                <td>Fetch API, JSON parsing</td>
+                            </tr>
+                            <tr>
+                                <td>Analysis Engine</td>
+                                <td>Data processing and calculations</td>
+                                <td>JavaScript algorithms</td>
+                            </tr>
+                            <tr>
+                                <td>Visualization</td>
+                                <td>Charts and statistical displays</td>
+                                <td>Chart.js, CSS animations</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="forecasting" class="section">
+                    <h2>Hybrid Forecasting System</h2>
+                    <p>
+                        Weather Wisdom employs a three-tiered forecasting approach, each optimized for different timeframes 
+                        and use cases.
+                    </p>
+
+                    <h3>1. Short-Term Forecasting (7 Days)</h3>
+                    <h4>Method: Real-Time API Integration</h4>
+                    <p>
+                        Utilizes OpenWeatherMap API for highly accurate near-term predictions.
+                    </p>
+                    <ul>
+                        <li><strong>Timeframe:</strong> Next 7 days</li>
+                        <li><strong>Update Frequency:</strong> Every 3 hours</li>
+                        <li><strong>Accuracy:</strong> ~90% for 24-48 hours, ~80% for 3-7 days</li>
+                        <li><strong>Data Points:</strong> Temperature, precipitation probability, wind speed, humidity, conditions</li>
+                    </ul>
+
+                    <div class="code-block">
+async function fetchShortTermForecast(lat, lon, apiKey) {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return processWeatherData(data);
+}
+                    </div>
+
+                    <h3>2. Medium-Term Forecasting (30 Days)</h3>
+                    <h4>Method: Statistical Analysis</h4>
+                    <p>
+                        Analyzes historical patterns from the same period in previous years to generate probability-based forecasts.
+                    </p>
+                    <ul>
+                        <li><strong>Timeframe:</strong> Next 30 days</li>
+                        <li><strong>Data Source:</strong> NASA POWER historical data (previous 1-3 years)</li>
+                        <li><strong>Accuracy:</strong> ~65-70% for general trends</li>
+                        <li><strong>Output:</strong> Probability distributions for various conditions</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>Statistical Approach:</strong> The system calculates the frequency of specific weather conditions 
+                        (hot days, cold days, rainy days) during the same calendar period in previous years, then applies 
+                        a confidence interval to generate probability estimates.
+                    </div>
+
+                    <div class="code-block">
+Probability Calculation:
+P(Hot Day) = (Hot Days in Historical Period) / (Total Days in Period)
+
+Example:
+Period: Jan 1-31 (last 3 years)
+Hot Days (>30°C): 15 out of 93 total days
+P(Hot Day in upcoming Jan) = 15/93 = 16.1%
+                    </div>
+
+                    <h3>3. Long-Term Forecasting (Seasonal)</h3>
+                    <h4>Method: Climate Pattern Analysis</h4>
+                    <p>
+                        Provides seasonal outlooks based on 30-year climate averages and regional patterns.
+                    </p>
+                    <ul>
+                        <li><strong>Timeframe:</strong> 3-12 months ahead</li>
+                        <li><strong>Data Source:</strong> Climate normals, seasonal patterns</li>
+                        <li><strong>Accuracy:</strong> ~60% for general seasonal trends</li>
+                        <li><strong>Use Case:</strong> Long-term planning, travel, agriculture</li>
+                    </ul>
+                </section>
+
+                <section id="comfort" class="section">
+                    <h2>Weather Comfort Index Algorithm</h2>
+                    <p>
+                        The Comfort Index is a proprietary algorithm that quantifies how comfortable weather conditions 
+                        are for human activity on a scale of 0-100.
+                    </p>
+
+                    <h3>Algorithm Components</h3>
+
+                    <h4>1. Temperature Deviation Factor</h4>
+                    <p>Measures how far the temperature is from the user's ideal comfort temperature.</p>
+                    <div class="formula">
+                        tempDiff = |actualTemp - comfortTemp|<br>
+                        tempPenalty = min(tempDiff * 2, 40)
+                    </div>
+
+                    <h4>2. Humidity Factor</h4>
+                    <p>High humidity reduces comfort, especially at higher temperatures.</p>
+                    <div class="formula">
+                        IF humidity > 70:<br>
+                        humidityPenalty = (humidity - 70) * 0.5<br>
+                        ELSE:<br>
+                        humidityPenalty = 0
+                    </div>
+
+                    <h4>3. Wind Speed Factor</h4>
+                    <p>Strong winds can be uncomfortable, especially with temperature extremes.</p>
+                    <div class="formula">
+                        IF windSpeed > 5:<br>
+                        windPenalty = (windSpeed - 5) * 2<br>
+                        ELSE:<br>
+                        windPenalty = 0
+                    </div>
+
+                    <h4>4. Heat Index Adjustment</h4>
+                    <p>Accounts for the combined effect of temperature and humidity.</p>
+                    <div class="formula">
+                        heatIndex = -8.78469 + 1.61139 * T + 2.33854 * RH<br>
+                        - 0.14611 * T * RH - 0.01228 * T² - 0.01644 * RH²<br>
+                        + 0.002211 * T² * RH + 0.000728 * T * RH²<br>
+                        - 0.000004 * T² * RH²
+                    </div>
+
+                    <h3>Final Comfort Score Calculation</h3>
+                    <div class="code-block">
+function calculateComfortIndex(temp, humidity, windSpeed, comfortTemp) {
+    let score = 100;
+    
+    // Temperature penalty
+    const tempDiff = Math.abs(temp - comfortTemp);
+    score -= Math.min(tempDiff * 2, 40);
+    
+    // Humidity penalty
+    if (humidity > 70) {
+        score -= (humidity - 70) * 0.5;
+    }
+    
+    // Wind penalty
+    if (windSpeed > 5) {
+        score -= (windSpeed - 5) * 2;
+    }
+    
+    // Heat index adjustment
+    if (temp > 27 && humidity > 40) {
+        const heatIndex = calculateHeatIndex(temp, humidity);
+        const hiDiff = heatIndex - temp;
+        score -= hiDiff * 1.5;
+    }
+    
+    return Math.max(0, Math.min(100, score));
+}
+                    </code>
+
+                    <h3>Comfort Score Interpretation</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Score Range</th>
+                                <th>Label</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>80-100</td>
+                                <td>Excellent</td>
+                                <td>Ideal conditions for all outdoor activities</td>
+                            </tr>
+                            <tr>
+                                <td>60-79</td>
+                                <td>Good</td>
+                                <td>Comfortable for most activities</td>
+                            </tr>
+                            <tr>
+                                <td>40-59</td>
+                                <td>Fair</td>
+                                <td>Acceptable but may require adjustments</td>
+                            </tr>
+                            <tr>
+                                <td>0-39</td>
+                                <td>Poor</td>
+                                <td>Challenging conditions, take precautions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="api" class="section">
+                    <h2>API Integration</h2>
+
+                    <h3>NASA POWER API</h3>
+                    <p>Primary source for historical weather data.</p>
+
+                    <h4>Endpoint</h4>
+                    <div class="code-block">
+https://power.larc.nasa.gov/api/temporal/daily/point
+?parameters=T2M,PRECTOTCORR,RH2M,WS2M
+&community=AG
+&longitude={lng}
+&latitude={lat}
+&start={YYYYMMDD}
+&end={YYYYMMDD}
+&format=JSON
+                    </div>
+
+                    <h4>Parameters Used</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Description</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>T2M</td>
+                                <td>Temperature at 2 meters</td>
+                                <td>°C</td>
+                            </tr>
+                            <tr>
+                                <td>PRECTOTCORR</td>
+                                <td>Precipitation (corrected)</td>
+                                <td>mm/day</td>
+                            </tr>
+                            <tr>
+                                <td>RH2M</td>
+                                <td>Relative Humidity at 2 meters</td>
+                                <td>%</td>
+                            </tr>
+                            <tr>
+                                <td>WS2M</td>
+                                <td>Wind Speed at 2 meters</td>
+                                <td>m/s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>OpenWeatherMap API</h3>
+                    <p>Provides real-time forecasts for short-term predictions.</p>
+
+                    <h4>Setup Instructions</h4>
+                    <ol>
+                        <li>Register at <a href="https://openweathermap.org/api" target="_blank" style="color: var(--accent-cyan);">openweathermap.org</a></li>
+                        <li>Get your free API key (1000 calls/day limit)</li>
+                        <li>Enter API key in the Dashboard interface</li>
+                        <li>Click "Generate Short-Term Forecast"</li>
+                    </ol>
+
+                    <div class="warning-box">
+                        <strong>Note:</strong> Without an API key, the system will use demo mode with sample forecast data. 
+                        For production use and accurate forecasts, an API key is required.
+                    </div>
+
+                    <h4>API Call Example</h4>
+                    <div class="code-block">
+const apiKey = 'your_api_key_here';
+const url = `https://api.openweathermap.org/data/2.5/forecast?lat=31.89&lon=35.30&appid=${apiKey}&units=metric`;
+
+fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        // Process forecast data
+        const forecasts = data.list.map(item => ({
+            date: new Date(item.dt * 1000),
+            temp: item.main.temp,
+            condition: item.weather[0].main,
+            precipitation: item.pop * 100
+        }));
+    });
+                    </div>
+                </section>
+
+                <section id="thresholds" class="section">
+                    <h2>Custom Thresholds System</h2>
+                    <p>
+                        Users can define their personal comfort preferences, allowing the system to provide 
+                        personalized condition-based analysis.
+                    </p>
+
+                    <h3>Available Threshold Parameters</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Threshold</th>
+                                <th>Default Value</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Very Hot</td>
+                                <td>35°C</td>
+                                <td>Temperature considered extremely hot</td>
+                            </tr>
+                            <tr>
+                                <td>Very Cold</td>
+                                <td>5°C</td>
+                                <td>Temperature considered extremely cold</td>
+                            </tr>
+                            <tr>
+                                <td>Very Windy</td>
+                                <td>10 m/s</td>
+                                <td>Wind speed considered very strong</td>
+                            </tr>
+                            <tr>
+                                <td>Very Wet</td>
+                                <td>10 mm</td>
+                                <td>Daily precipitation considered heavy</td>
+                            </tr>
+                            <tr>
+                                <td>High Humidity</td>
+                                <td>80%</td>
+                                <td>Relative humidity considered uncomfortable</td>
+                            </tr>
+                            <tr>
+                                <td>Comfort Temperature</td>
+                                <td>22°C</td>
+                                <td>User's ideal temperature</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>How Thresholds Affect Analysis</h3>
+                    <p>
+                        The system compares actual weather data against your thresholds to categorize days and generate insights:
+                    </p>
+                    <ul>
+                        <li><strong>Very Hot Days:</strong> Count and percentage of days exceeding your hot threshold</li>
+                        <li><strong>Very Cold Days:</strong> Days below your cold threshold</li>
+                        <li><strong>Very Windy Days:</strong> Days with wind speeds above your wind threshold</li>
+                        <li><strong>Very Wet Days:</strong> Days with precipitation exceeding your wet threshold</li>
+                        <li><strong>Uncomfortable Days:</strong> Days where the Comfort Index falls below 40</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>Use Case Example:</strong> If you're planning an outdoor event and can't tolerate 
+                        temperatures above 28°C, set your "Very Hot" threshold to 28°C. The system will then show you 
+                        exactly how many days in your selected period exceeded this temperature.
+                    </div>
+                </section>
+
+                <section id="usage" class="section">
+                    <h2>User Guide</h2>
+
+                    <h3>Getting Started</h3>
+                    <ol>
+                        <li><strong>Select Location:</strong> Click on the map to choose your location of interest</li>
+                        <li><strong>Set Date Range:</strong> Choose start and end dates for analysis</li>
+                        <li><strong>Customize Thresholds:</strong> Adjust weather condition thresholds to match your preferences</li>
+                        <li><strong>Analyze:</strong> Click "Analyze Weather Conditions" to process data</li>
+                    </ol>
+
+                    <h3>Using the Forecasting System</h3>
+
+                    <h4>Short-Term Forecast (7 Days)</h4>
+                    <ol>
+                        <li>Click the "Short-term (7 days)" tab</li>
+                        <li>Enter your OpenWeatherMap API key (or use demo mode)</li>
+                        <li>Click "Generate Short-Term Forecast"</li>
+                        <li>View daily forecasts with temperature, conditions, and precipitation probability</li>
+                    </ol>
+
+                    <h4>Medium-Term Forecast (30 Days)</h4>
+                    <ol>
+                        <li>Click the "Medium-term (30 days)" tab</li>
+                        <li>Select location and date range</li>
+                        <li>Click "Generate Medium-Term Outlook"</li>
+                        <li>Review probability analysis for various weather conditions</li>
+                    </ol>
+
+                    <h4>Long-Term Forecast (Seasonal)</h4>
+                    <ol>
+                        <li>Click the "Long-term (Seasonal)" tab</li>
+                        <li>Click "Generate Long-Term Outlook"</li>
+                        <li>View seasonal patterns and climate expectations</li>
+                    </ol>
+
+                    <h3>Interpreting Results</h3>
+
+                    <h4>Statistics Panel</h4>
+                    <ul>
+                        <li><strong>Average Temperature:</strong> Mean temperature over the selected period</li>
+                        <li><strong>Max/Min Temperature:</strong> Highest and lowest recorded temperatures</li>
+                        <li><strong>Average Precipitation:</strong> Mean daily precipitation</li>
+                        <li><strong>Comfort Score:</strong> Overall comfort rating based on the algorithm</li>
+                    </ul>
+
+                    <h4>Condition Badges</h4>
+                    <p>Color-coded badges show the count and percentage of days meeting specific conditions:</p>
+                    <ul>
+                        <li><strong>Red Badge (Very Hot):</strong> Days exceeding your hot threshold</li>
+                        <li><strong>Blue Badge (Very Cold):</strong> Days below your cold threshold</li>
+                        <li><strong>Green Badge (Very Windy):</strong> Days with strong winds</li>
+                        <li><strong>Cyan Badge (Very Wet):</strong> Days with heavy precipitation</li>
+                        <li><strong>Purple Badge (Uncomfortable):</strong> Days with poor comfort scores</li>
+                    </ul>
+
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Start with default thresholds, then adjust based on your needs</li>
+                        <li>For accurate short-term forecasts, always use an API key</li>
+                        <li>Medium-term forecasts are most reliable for general planning, not specific days</li>
+                        <li>Long-term outlooks should be used for seasonal trends only</li>
+                        <li>Compare multiple timeframes for comprehensive planning</li>
+                    </ul>
+                </section>
+
+                <section id="technical" class="section">
+                    <h2>Technical Details</h2>
+
+                    <h3>Performance Optimization</h3>
+                    <ul>
+                        <li><strong>Data Caching:</strong> In-memory storage reduces redundant API calls</li>
+                        <li><strong>Lazy Loading:</strong> Charts and forecasts load only when tabs are activated</li>
+                        <li><strong>Throttling:</strong> API calls are rate-limited to prevent quota exhaustion</li>
+                        <li><strong>Responsive Design:</strong> Optimized for mobile, tablet, and desktop</li>
+                    </ul>
+
+                    <h3>Browser Compatibility</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Browser</th>
+                                <th>Minimum Version</th>
+                                <th>Features Supported</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Chrome</td>
+                                <td>90+</td>
+                                <td>All features</td>
+                            </tr>
+                            <tr>
+                                <td>Firefox</td>
+                                <td>88+</td>
+                                <td>All features</td>
+                            </tr>
+                            <tr>
+                                <td>Safari</td>
+                                <td>14+</td>
+                                <td>All features</td>
+                            </tr>
+                            <tr>
+                                <td>Edge</td>
+                                <td>90+</td>
+                                <td>All features</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Error Handling</h3>
+                    <p>The system implements comprehensive error handling:</p>
+                    <ul>
+                        <li><strong>API Failures:</strong> Graceful fallback to demo mode</li>
+                        <li><strong>Invalid Inputs:</strong> User-friendly validation messages</li>
+                        <li><strong>Network Issues:</strong> Retry logic with exponential backoff</li>
+                        <li><strong>Data Anomalies:</strong> Filtering of invalid values (-999 flags)</li>
+                    </ul>
+
+                    <h3>Data Processing Pipeline</h3>
+                    <div class="code-block">
+Raw API Data
+    ↓
+Data Validation
+    ├─→ Check for null/undefined values
+    ├─→ Filter out -999 (NASA missing data flag)
+    └─→ Validate date ranges
+    ↓
+Data Transformation
+    ├─→ Unit conversions (if needed)
+    ├─→ Date formatting
+    └─→ Statistical calculations
+    ↓
+Algorithm Application
+    ├─→ Comfort Index calculation
+    ├─→ Threshold comparisons
+    └─→ Condition categorization
+    ↓
+Output Generation
+    ├─→ Chart data preparation
+    ├─→ Statistics aggregation
+    └─→ UI updates
+                    </div>
+
+                    <h3>Security Considerations</h3>
+                    <div class="info-box">
+                        <strong>API Key Storage:</strong> API keys are stored only in memory during the session. 
+                        The application does not use localStorage or sessionStorage, ensuring keys are never 
+                        persisted in the browser.
+                    </div>
+
+                    <ul>
+                        <li><strong>No Server-Side Storage:</strong> All processing happens client-side</li>
+                        <li><strong>HTTPS Only:</strong> All API calls use secure connections</li>
+                        <li><strong>Input Sanitization:</strong> User inputs are validated before processing</li>
+                        <li><strong>Rate Limiting:</strong> Built-in protection against API abuse</li>
+                    </ul>
+
+                    <h3>Future Enhancements (Phase 2)</h3>
+                    <ul>
+                        <li><strong>Machine Learning Models:</strong> Integration of ARIMA, Neural Networks for predictions</li>
+                        <li><strong>Additional Data Sources:</strong> NOAA, European weather services</li>
+                        <li><strong>Advanced Analytics:</strong> Trend analysis, anomaly detection</li>
+                        <li><strong>User Accounts:</strong> Save preferences and historical searches</li>
+                        <li><strong>Mobile App:</strong> Native iOS/Android applications</li>
+                        <li><strong>Alert System:</strong> Notifications for specific weather conditions</li>
+                    </ul>
+
+                    <h3>Known Limitations</h3>
+                    <div class="warning-box">
+                        <strong>Current Limitations:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>NASA POWER API provides historical data only (no real-time current conditions)</li>
+                            <li>OpenWeatherMap free tier limited to 1000 calls/day</li>
+                            <li>Medium-term forecasts are probability-based, not deterministic</li>
+                            <li>Long-term forecasts rely on climate averages, not specific predictions</li>
+                            <li>Comfort Index is a general model and may not suit all individuals</li>
+                        </ul>
+                    </div>
+
+                    <h3>Troubleshooting</h3>
+                    
+                    <h4>Map Not Loading</h4>
+                    <ul>
+                        <li>Check internet connection</li>
+                        <li>Disable browser ad blockers</li>
+                        <li>Clear browser cache and reload</li>
+                    </ul>
+
+                    <h4>API Errors</h4>
+                    <ul>
+                        <li>Verify API key is correct (OpenWeatherMap)</li>
+                        <li>Check if API quota is exceeded</li>
+                        <li>Ensure date range is within valid bounds (NASA: 1981-present)</li>
+                    </ul>
+
+                    <h4>No Data Displayed</h4>
+                    <ul>
+                        <li>Ensure location is selected on map</li>
+                        <li>Check date range is valid</li>
+                        <li>Look for error messages in console (F12)</li>
+                    </ul>
+
+                    <h3>Contributing & Feedback</h3>
+                    <p>
+                        Weather Wisdom is developed for the NASA Space Apps Challenge 2025 by TopTeam. 
+                        For questions, suggestions, or bug reports, please contact the development team.
+                    </p>
+
+                    <div class="info-box">
+                        <strong>Project Information:</strong><br>
+                        <strong>Team:</strong> TopTeam<br>
+                        <strong>Competition:</strong> NASA Space Apps Challenge 2025<br>
+                        <strong>Challenge:</strong> Weather Wisdom<br>
+                        <strong>Version:</strong> 1.0 (Phase 1)
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>Quick Reference</h2>
+                    
+                    <h3>Key Formulas</h3>
+                    <div class="code-block">
+Comfort Index:
+CI = 100 - tempPenalty - humidityPenalty - windPenalty - heatIndexPenalty
+
+Heat Index:
+HI = -8.78 + 1.61*T + 2.34*RH - 0.146*T*RH - 0.012*T² - 0.016*RH²
+     + 0.002*T²*RH + 0.001*T*RH² - 0.000004*T²*RH²
+
+Statistical Forecast:
+P(condition) = (Historical occurrences) / (Total days in period)
+                    </div>
+
+                    <h3>API Endpoints Quick Reference</h3>
+                    <div class="code-block">
+NASA POWER:
+https://power.larc.nasa.gov/api/temporal/daily/point
+
+OpenWeatherMap Forecast:
+https://api.openweathermap.org/data/2.5/forecast
+                    </div>
+
+                    <h3>Default Threshold Values</h3>
+                    <div class="code-block">
+Very Hot: 35°C
+Very Cold: 5°C
+Very Windy: 10 m/s
+Very Wet: 10 mm
+High Humidity: 80%
+Comfort Temperature: 22°C
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer style="background: var(--bg-card); padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p style="color: var(--text-secondary);">Weather Wisdom Documentation | TopTeam | NASA Space Apps Challenge 2025</p>
+       
+    </footer>
+</body>
+</html>
