@@ -458,20 +458,104 @@
                 grid-template-columns: 1fr;
             }
         }
+        /* Mobile Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 1001;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: var(--accent-cyan);
+    transition: 0.3s;
+    border-radius: 3px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        right: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: rgba(26, 35, 71, 0.98);
+        backdrop-filter: blur(20px);
+        width: 250px;
+        transition: right 0.3s ease;
+        padding: 2rem;
+        border-left: 1px solid var(--accent-cyan);
+        height: calc(100vh - 70px);
+        box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .nav-links.active {
+        right: 0;
+    }
+    
+    .nav-links li {
+        margin: 1rem 0;
+    }
+}
+
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
     </style>
 </head>
 <body>
     <div class="particles" id="particles"></div>
 
-    <nav>
+   
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
         <div class="logo">⚡ Weather Wisdom</div>
-        <div class="nav-links">
-            <a href="Landing Page.html">Home</a>
-            <a href="DASH.html">Dashboard</a>
-            <a href="About.html">About</a>
-            <a href="Documentation Page.html">Documentation</a>
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="Landing Page.html">Home</a></li>
+            <li><a href="DASH.html">Dashboard</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Documentation Page.html">Documentation</a></li>
+        </ul>
+    </div>
+</nav>
 
     <div class="container">
         <div class="hero-section">
@@ -747,6 +831,25 @@
             particle.style.animationDuration = (Math.random() * 15 + 20) + 's';
             particlesContainer.appendChild(particle);
         }
-    </script>
+   
+    function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.querySelector('.hamburger');
+    navLinks.classList.toggle('active');
+    hamburger.classList.toggle('active');
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+    const nav = document.querySelector('.nav-container');
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.querySelector('.hamburger');
+    
+    if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('active');
+    }
+});
+ </script>
 </body>
 </html>
